@@ -1,0 +1,50 @@
+##########################################################################
+# 部署配置文件(base)
+# 本配置文件(xx.yml)中的变量(${xxx})是从同级目录下的.env文件中读取的
+##########################################################################
+# compose支持的版本2
+version: "2"
+services:
+  # postgres
+  postgres:
+    image: ${IMAGE_POSTGRES}
+    container_name: "postgres.${GROUP_NAME}.${PRODUCT_NAME}.${COMPANY_NAME}"
+    hostname: "postgres.${GROUP_NAME}.${PRODUCT_NAME}.${COMPANY_NAME}"
+    restart: "always"
+    environment:
+      - POSTGRES_USER=sonar
+      - POSTGRES_PASSWORD=sonar
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - ./volume/postgres/data:/var/lib/postgresql/data:rw
+    ports:
+      - "5432:5432"
+    networks:
+      mynet:
+        ipv4_address: 172.16.100.10
+  # sonarqube
+  sonarqube:
+    image: ${IMAGE_SONARQUBE}
+    container_name: "sonarqube.${GROUP_NAME}.${PRODUCT_NAME}.${COMPANY_NAME}"
+    hostname: "sonarqube.${GROUP_NAME}.${PRODUCT_NAME}.${COMPANY_NAME}"
+    restart: "always"
+    environment:
+      - SONARQUBE_JDBC_URL=jdbc:postgresql://postgres:5432/sonar
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - ./volume/sonarqube/conf:/opt/sonarqube/conf:rw
+      - ./volume/sonarqube/data:/opt/sonarqube/data:rw
+      - ./volume/sonarqube/extensions:/opt/sonarqube/extensions:rw
+      - ./volume/sonarqube/plugins:/opt/sonarqube/lib/bundled-plugins:rw
+    ports:
+      - "9000:9000"
+    networks:
+      mynet:
+        ipv4_address: 172.16.100.20
+networks:
+  mynet:
+    driver: bridge
+    ipam:
+      driver: default
+      config:
+        - subnet: "172.16.100.0/24"
