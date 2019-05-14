@@ -8,8 +8,8 @@ services:
   # postgres
   postgres:
     image: ${IMAGE_POSTGRES}
-    container_name: "postgres.${GROUP_NAME}.${PRODUCT_NAME}.${COMPANY_NAME}"
-    hostname: "postgres.${GROUP_NAME}.${PRODUCT_NAME}.${COMPANY_NAME}"
+    container_name: "postgres.${PRODUCT_NAME}.${COMPANY_NAME}"
+    hostname: "postgres.${PRODUCT_NAME}.${COMPANY_NAME}"
     restart: "always"
     environment:
       - POSTGRES_USER=sonar
@@ -25,8 +25,8 @@ services:
   # sonarqube
   sonarqube:
     image: ${IMAGE_SONARQUBE}
-    container_name: "sonarqube.${GROUP_NAME}.${PRODUCT_NAME}.${COMPANY_NAME}"
-    hostname: "sonarqube.${GROUP_NAME}.${PRODUCT_NAME}.${COMPANY_NAME}"
+    container_name: "sonarqube.${PRODUCT_NAME}.${COMPANY_NAME}"
+    hostname: "sonarqube.${PRODUCT_NAME}.${COMPANY_NAME}"
     restart: "always"
     environment:
       - SONARQUBE_JDBC_URL=jdbc:postgresql://postgres:5432/sonar
