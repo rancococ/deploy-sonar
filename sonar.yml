@@ -17,6 +17,8 @@ services:
     volumes:
       - /etc/localtime:/etc/localtime:ro
       - ./volume/postgres/data:/var/lib/postgresql/data:rw
+    extra_hosts:
+      - "postgres.${PRODUCT_NAME}.${COMPANY_NAME}:172.16.100.10"
     ports:
       - "5432:5432"
     networks:
@@ -36,6 +38,8 @@ services:
       - ./volume/sonarqube/data:/opt/sonarqube/data:rw
       - ./volume/sonarqube/extensions:/opt/sonarqube/extensions:rw
       - ./volume/sonarqube/plugins:/opt/sonarqube/lib/bundled-plugins:rw
+    extra_hosts:
+      - "sonarqube.${PRODUCT_NAME}.${COMPANY_NAME}:172.16.100.20"
     ports:
       - "9000:9000"
     networks:
